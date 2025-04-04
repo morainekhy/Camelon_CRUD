@@ -13,36 +13,34 @@ const items = [
 ];
 
 // GET
-app.get('/api/items', (req, res) =>{
+app.get('/api/items', (req, res) => {
     res.json(items);
 });
 
-//POST
-app.post('/api/items', (req, res) =>{
-    const newItem = {id: items.length +1, name: req.body.name};
+// POST
+app.post('/api/items', (req, res) => {
+    const newItem = {id: items.length + 1, name: req.body.name};
     items.push(newItem);
     res.status(201).json(newItem);
 });
 
 // PUT
-app.put('/api/items', (req, res) =>{
+app.put('/api/items/:id', (req, res) => {
     const item = items.find(i => i.id === parseInt(req.params.id));
     if (!item) return res.status(404).json({message: "Item not found"});
-    item.name = res.body.name;
+    item.name = req.body.name;
     res.json(item);
 });
 
 // DELETE
-app.delete('/api/items', (req, res) =>{
-    const item = items.findIndex(i => i.id === parseInt(req.params.id));
-    if (idex === -1) return res.status(404).json({message: "Item not found"});
+app.delete('/api/items/:id', (req, res) => {
+    const index = items.findIndex(i => i.id === parseInt(req.params.id));
+    if (index === -1) return res.status(404).json({message: "Item not found"});
 
     items.splice(index, 1);
     res.json({message: "Item deleted"});
-
 });
 
 const PORT = 5000;
 
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));
-
